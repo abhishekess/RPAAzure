@@ -39,7 +39,6 @@ steps:
     repository: rpaazure
     dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
     containerRegistry: 'RPAAzure-ACR-Service-Connection'
-    arguments: '--registry-login-server rpaazuredevcr.azurecr.io --registry-username rpaazuredevcr --registry-password ${{ parameters.AcrPassword }}'
     tags: |
       $(Build.SourceVersion)
       latest
