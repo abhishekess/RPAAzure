@@ -31,6 +31,15 @@ steps:
     arguments: '--configuration $(buildConfiguration)'
     projects: '$(solution)'
 
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'Visual Studio Enterprise Subscription_Amaresh(9f825056-d698-477d-81a3-2b95d920ac98)'
+    scriptType: 'pscore'
+    scriptLocation: 'inlineScript'
+    inlineScript: 'az acr login --name rpaazuredevcr'
+    addSpnToEnvironment: true
+    useGlobalConfig: true
+
 - task: Docker@2
   displayName: Build and push an image to container registry
   inputs:
