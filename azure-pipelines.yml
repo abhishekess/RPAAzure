@@ -13,6 +13,7 @@ variables:
   buildConfiguration: 'Release'
   containerRegistry: 'rpaazuredevcr.azurecr.io'
   imagerepository: 'rpaazure'
+  tag: $(Build.SourceVersion)
 
 steps:
 - task: NuGetToolInstaller@1
@@ -36,7 +37,7 @@ steps:
     dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
     containerRegistry: 'RPAAzure-ACR-Service-Connection'
     tags: |
-      $(Build.SourceVersion)
+      $(tag)
       latest
   
 - script: |
