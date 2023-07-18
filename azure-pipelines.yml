@@ -43,7 +43,9 @@ steps:
     
     sudo add-apt-repository ppa:rmescandon/yq
     sudo apt-get install yq
-    
+
+    git config --global user.email "abhishekb@esspl.com"
+
     git clone https://github.com/abhishekess/RPAAzure-Infrastructure
     
     cd RPAAzure-Infrastructure/overlays/dev
