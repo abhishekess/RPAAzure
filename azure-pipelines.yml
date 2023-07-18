@@ -17,6 +17,8 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  containerRegistry: 'rpaazuredevcr.azurecr.io'
+  imagerepository: 'rpaazure'
 
 steps:
 - task: NuGetToolInstaller@1
@@ -36,10 +38,28 @@ steps:
   displayName: Build and push an image to container registry
   inputs:
     command: buildAndPush
-    repository: rpaazure
+    repository: $(containerRegistry)
     dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
     containerRegistry: 'RPAAzure-ACR-Service-Connection'
     tags: |
       $(Build.SourceVersion)
       latest
   
+- script: |
+    
+    sudo add-apt-repository ppa:rmescandon/yq
+    sudo apt-get install yq
+    
+    git clone https://github.com/abhishekess/RPAAzure-Infrastructure
+    
+    cd RPAAzure-Infrastructure/overlays/dev
+    
+    yq e -i '.images.[] |= {select(.name == "$(containerRegistry)/$(imagerepository)") |= .newTag = "$(tag)"}' kustomization.yaml
+    
+    cd ../../
+    
+    git add .
+    git commit -m "update dev $(Build.Repository.Name)"
+    git push
+
+  displayName: 'Deploy dev'
