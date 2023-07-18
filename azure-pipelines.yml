@@ -45,6 +45,7 @@ steps:
     sudo apt-get install yq
 
     git config --global user.email "abhishekb@esspl.com"
+    git config --global user.name "Abhishek"
 
     git clone https://github.com/abhishekess/RPAAzure-Infrastructure
     
