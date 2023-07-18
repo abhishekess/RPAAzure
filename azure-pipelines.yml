@@ -1,9 +1,3 @@
-parameters:
-  - name: AcrPassword
-    displayName: AcrPassword
-    type: string
-    default: ''
-
 trigger:
 - master
 
