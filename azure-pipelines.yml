@@ -44,7 +44,7 @@ steps:
     sudo add-apt-repository ppa:rmescandon/yq
     sudo apt-get install yq
 
-    git config --global credential.helper "store --file=.git/credentials"
+    git config --global credential.helper '!f() { echo "username=$1"; echo "password=$2"; }; f $(system.accesstoken) $(GITHUBPAT)'
     git config --global user.email "abhishekb@esspl.com"
     git config --global user.name "Abhishek"
 
