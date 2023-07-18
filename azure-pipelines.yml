@@ -1,8 +1,3 @@
-# ASP.NET Core (.NET Framework)
-# Build and test ASP.NET Core projects targeting the full .NET Framework.
-# Add steps that publish symbols, save build artifacts, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
-
 trigger:
 - master
 
@@ -16,6 +11,9 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  containerRegistry: 'rpaazuredevcr.azurecr.io'
+  imagerepository: 'rpaazure'
+  tag: $(Build.SourceVersion)
 
 steps:
 - task: NuGetToolInstaller@1
@@ -35,10 +33,32 @@ steps:
   displayName: Build and push an image to container registry
   inputs:
     command: buildAndPush
-    repository: rpaazure
+    repository: $(imagerepository)
     dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
     containerRegistry: 'RPAAzure-ACR-Service-Connection'
     tags: |
-      $(Build.SourceVersion)
+      $(tag)
       latest
   
+- script: |
+    
+    sudo add-apt-repository ppa:rmescandon/yq
+    sudo apt-get install yq
+
+    git config --global credential.helper '!f() { echo "username=$1"; echo "password=$2"; }; f $(system.accesstoken) $(GITHUBPAT)'
+    git config --global user.email "abhishekb@esspl.com"
+    git config --global user.name "Abhishek"
+
+    git clone https://github.com/abhishekess/RPAAzure-Infrastructure.git
+    
+    cd RPAAzure-Infrastructure/overlays/dev
+    
+    yq e -i '.images.[] |= {select(.name == "$(containerRegistry)/$(imagerepository)") |= .newTag = "$(tag)"}' kustomization.yaml
+    
+    cd ../../
+    
+    git add .
+    git commit -m "update dev $(Build.Repository.Name)"
+    git push
+
+  displayName: 'Deploy dev'
