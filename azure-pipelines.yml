@@ -44,7 +44,7 @@ steps:
     sudo add-apt-repository ppa:rmescandon/yq
     sudo apt-get install yq
 
-    git clone -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" "https://github.com/abhishekess/RPAAzure-Infrastructure"
+    git clone https://github.com/abhishekess/RPAAzure-Infrastructure.git
     
     cd RPAAzure-Infrastructure/overlays/dev
     
