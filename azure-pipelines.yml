@@ -33,7 +33,7 @@ steps:
   displayName: Build and push an image to container registry
   inputs:
     command: buildAndPush
-    repository: $(containerRegistry)
+    repository: $(imagerepository)
     dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
     containerRegistry: 'RPAAzure-ACR-Service-Connection'
     tags: |
